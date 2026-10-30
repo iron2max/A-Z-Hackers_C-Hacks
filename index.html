@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>PULSEPOINT: The 60-Second Emergency</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <canvas id="gl"></canvas>
+    <div id="hud" class="hide">
+        <div id="obj" class="pn"></div>
+        <div id="tr" class="pn"><canvas id="mm" width="140" height="140"></canvas>
+            <div id="pts"></div>
+        </div>
+        <canvas id="ecg" width="220" height="44"></canvas>
+        <div id="feed" class="pn"></div>
+        <div id="help" class="pn">Arrow keys: move · Shift: sprint<br>Drag mouse or Z/C: camera · E: interact</div>
+        <div id="tools"><button id="bm" aria-label="Mute">🔊</button><button id="ba"
+                aria-label="Larger text">A+</button><button id="bl" aria-label="Leaderboard">🏆</button></div>
+        <div id="prompt" class="hide"></div>
+    </div>
+    <div id="touch" aria-label="Touch controls"><button class="touch" data-m="left"
+            aria-label="Move left">◀</button><button class="touch" data-m="up"
+            aria-label="Move forward">▲</button><button class="touch" data-m="right"
+            aria-label="Move right">▶</button><button class="touch" data-m="sprint"
+            aria-label="Sprint">⚡</button><button class="touch go" data-m="interact"
+            aria-label="Assess patient">E</button><button class="touch" data-m="down"
+            aria-label="Move backward">▼</button></div>
+    <div id="ov" class="menu"></div>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <div id="live" class="sr" role="status" aria-live="assertive"></div>
+    <div id="ld">Loading city…</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="config.js"></script>
+    <script src="game.js"></script>
+</body>
+
+</html>
