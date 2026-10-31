@@ -89,10 +89,10 @@ function playSiren() {
         o.frequency.setValueAtTime(700, now);
         o.frequency.linearRampToValueAtTime(960, now + 0.35);
         o.frequency.linearRampToValueAtTime(700, now + 0.7);
-
+        
         g.gain.setValueAtTime(0.15, now); // Increased volume gain
         g.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
-
+        
         o.connect(g); g.connect(AC.destination);
         o.start(now); o.stop(now + 0.7);
     } catch (e) { }
@@ -178,8 +178,8 @@ ${opts.map((x, n) => `<button class="opt choice-btn" data-n="${n}"><span class="
 <div class="safe-note"><b>Training simulation.</b> Prioritise your safety, call professional help early, and follow the dispatcher. This is educational—not diagnosis or a substitute for certified training.</div>
 <p><button id="leaveMissionBtn" class="opt" style="background:#334155; margin-top: 10px;">Return to Main Menu</button></p>
 <small>Press 1–3 to choose. Safe choices matter more than speed.</small></div>`;
-
-    ov.querySelectorAll("button.choice-btn").forEach(b => b.onclick = () => { beep(880, .1); pick(+b.dataset.n); });
+    
+    ov.querySelectorAll("button.choice-btn").forEach(b => b.onclick = () => { beep(880, .1); pick(+b.dataset.n); }); 
     $("leaveMissionBtn").onclick = () => {
         beep(600, .1);
         state = "menu";
@@ -204,7 +204,7 @@ function pick(n) {
     M.fb = 1; const card = document.querySelector(".card");
     card.querySelectorAll(".opt").forEach(b => b.disabled = true);
     const fb = document.createElement("div"); fb.className = "fb " + (ok ? "g" : "b"); fb.innerHTML = (ok ? "✅ " : "⚠️ ") + (ok ? o[2] : "Unsafe choice. " + s[2].find(x => x[1])[2] + " Safer option: <b>" + s[2].find(x => x[1])[0] + "</b>");
-    const bt = document.createElement("button"); bt.className = "opt"; bt.textContent = M.step + 1 < m.steps.length ? "Continue (Enter)" : "Call it in: responders arrive";
+    const bt = document.createElement("button"); bt.className = "opt"; bt.textContent = M.step + 1 < m.steps.length ? "Continue (Enter)" : "Call it in: responders arrive"; 
     bt.onclick = () => { beep(880, .1); next(); };
     card.append(fb, bt); bt.focus();
     setPatient(); hud(); if (ok && s[1] === "safe") ach("Scene Safety First")
@@ -225,9 +225,9 @@ function debrief() {
 ${M.wrong.length ? `<h3>Unsafe actions to avoid</h3>${M.wrong.map(w => `<div>• ${w[1]}<br><small>Why: ${w[2]}</small></div>`).join("")}` : "<p>🎯 No unsafe choices. Excellent.</p>"}
 <p><button id="rp">Replay mission</button> <button id="nx" class="big">${i < 5 ? "Next mission" : "See campaign result"}</button></p>
 <p><button id="leaveDebriefBtn" class="opt" style="background:#334155; width:100%; margin-top:8px;">Return to Main Menu</button></p></div>`;
-
-    $("rp").onclick = () => { beep(880, .1); S.cur = i; go(i); };
-    $("nx").onclick = () => { beep(880, .1); i < 5 ? breakScreen(i + 1) : go(i + 1); };
+    
+    $("rp").onclick = () => { beep(880, .1); S.cur = i; go(i); }; 
+    $("nx").onclick = () => { beep(880, .1); i < 5 ? breakScreen(i + 1) : go(i + 1); }; 
     $("leaveDebriefBtn").onclick = () => {
         beep(600, .1);
         state = "menu";
@@ -267,26 +267,26 @@ ${Object.entries(S.cats).map(([k, v]) => `<div class="row"><span>${CATS[k]}</spa
 <h3>Leaderboard</h3><small>Your best campaign score is saved automatically on this device.</small><div id="lbl"></div><p><button id="again" class="big">Play again</button></p></div>`; $("again").onclick = () => { beep(880, .1); reset(); location.reload() }; $("lbl").innerHTML = lbHtml()
 }
 const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-function getLB() {
-    try {
+function getLB() { 
+    try { 
         return JSON.parse(localStorage.getItem("pulsepoint_lb") || "[]");
-    } catch (e) {
-        return [];
-    }
+    } catch (e) { 
+        return []; 
+    } 
 }
-function addLB(n, p, a, e) {
+function addLB(n, p, a, e) { 
     try {
-        const l = getLB(), name = n.slice(0, 14), old = l.find(r => r.n === name);
-        if (old) {
-            if (p > old.p || p === old.p && a > old.a) Object.assign(old, { p, a, e });
+        const l = getLB(), name = n.slice(0, 14), old = l.find(r => r.n === name); 
+        if (old) { 
+            if (p > old.p || p === old.p && a > old.a) Object.assign(old, { p, a, e }); 
         } else {
-            l.push({ n: name, p, a, e });
+            l.push({ n: name, p, a, e }); 
         }
-        l.sort((x, y) => y.p - x.p || y.a - x.a);
-        localStorage.setItem("pulsepoint_lb", JSON.stringify(l.slice(0, 10)));
-    } catch (x) {
+        l.sort((x, y) => y.p - x.p || y.a - x.a); 
+        localStorage.setItem("pulsepoint_lb", JSON.stringify(l.slice(0, 10))); 
+    } catch (x) { 
         console.warn("Leaderboard storage unavailable");
-    }
+    } 
 }
 function lbHtml() { const l = getLB(); return l.length ? `<table style="width:100%;border-collapse:collapse">${l.map((r, i) => `<tr><td>${i + 1}</td><td>${esc(r.n)}</td><td>${r.p} pts</td><td>${r.a}% safe</td><td><small>${esc(r.e)}</small></td></tr>`).join("")}</table>` : "<p>No scores yet. Finish the campaign to set the first one.</p>" }
 function lbScreen(back) { $("ov").className = ""; $("ov").innerHTML = `<div class="card"><h2>Leaderboard</h2><small>Top scores on this device, updated automatically after every completed campaign.</small>${lbHtml()}<p><button id="bk" class="big">Back</button></p></div>`; $("bk").onclick = () => { beep(880, .1); back(); }; $("bk").focus() }
@@ -321,11 +321,11 @@ function menu() {
     const ov = $("ov"); ov.className = "menu"; ov.innerHTML = `<div style="text-align:center;max-width:680px"><h1>PULSEPOINT</h1><p style="font-size:20px;letter-spacing:3px;margin:6px 0">THE 60-SECOND EMERGENCY</p><canvas id="ecg2" width="420" height="70"></canvas>
 <p>Drive a rapid-response ambulance, park safely, assess six emergencies, and practise the safest next decision.</p><div class="home-grid"><div class="home-card">🚑 <b>Response drive</b><br>Spawn in your ambulance and follow the beacon.</div><div class="home-card">🧠 <b>Learn by doing</b><br>Your responder visibly acts on each safe decision.</div><div class="home-card">🏅 <b>Earn mastery</b><br>Score safety, streaks, tips, and mission debriefs.</div></div><p><small><b>Drive:</b> WASD or arrow keys · Shift: boost · E: park / interact · Drag or Z/C: look</small></p>
 <button id="st" class="big">Begin</button> <button id="lb">Leaderboard</button> ${S.done.length ? `<button id="rs">Reset progress</button><br><small>Saved progress: ${S.done.length} of 6 missions complete</small>` : ""}
-<div class="signin" id="signInPanel"><b>Responder profile</b><br><small id="signInStatus">Sign in to use your Google profile on this device.</small><div id="googleSignIn" class="google-signin"></div><button id="signOut" class="hide" type="button">Sign out</button></div><p><span class="tag">6 scenarios</span><span class="tag">Safety-first scoring</span><span class="tag">Keyboard + touch</span></p><p><small>Educational only. If someone may be in immediate danger, call your local emergency number (112 in India) and follow the dispatcher. Guidance is general and not a substitute for certified first-aid training.</small></p></div>`;
-    $("st").onclick = () => { beep(880, .1); S.cur = Math.min(S.cur, 5); try { AC = AC || new (window.AudioContext || window.webkitAudioContext)() } catch (e) { } startGame() };
-    $("st").focus();
-    setupGoogleSignIn();
-    $("lb").onclick = () => { beep(880, .1); lbScreen(menu); };
+<div class="signin" id="signInPanel"><b>Responder profile</b><br><small id="signInStatus">Sign in to use your Google profile on this device.</small><div id="googleSignIn" class="google-signin"></div><button id="signOut" class="hide" type="button">Sign out</button></div><p><span class="tag">6 scenarios</span><span class="tag">Safety-first scoring</span><span class="tag">Keyboard + touch</span></p><p><small>Educational only. If someone may be in immediate danger, call your local emergency number (112 in India) and follow the dispatcher. Guidance is general and not a substitute for certified first-aid training.</small></p></div>`; 
+    $("st").onclick = () => { beep(880, .1); S.cur = Math.min(S.cur, 5); try { AC = AC || new (window.AudioContext || window.webkitAudioContext)() } catch (e) { } startGame() }; 
+    $("st").focus(); 
+    setupGoogleSignIn(); 
+    $("lb").onclick = () => { beep(880, .1); lbScreen(menu); }; 
     if ($("rs")) $("rs").onclick = () => { beep(180, .1); reset(); location.reload(); }
 }
 /* ---------- input ---------- */
