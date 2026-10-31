@@ -75,6 +75,30 @@ function beep(f = 660, d = .12, type = "sine", v = .07) {
 }
 const thump = () => { beep(60, .18, "sine", .2); setTimeout(() => beep(55, .15, "sine", .14), 170) };
 setInterval(() => { if (M && state === "scn") thump() }, 700);
+
+// Louder siren sound effect for driving the ambulance
+let sirenTimer = 0;
+function playSiren() {
+    if (mute || !driving || state !== "play") return;
+    try {
+        AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+        if (AC.state === 'suspended') { AC.resume(); }
+        const o = AC.createOscillator(), g = AC.createGain();
+        o.type = "sawtooth";
+        const now = AC.currentTime;
+        o.frequency.setValueAtTime(700, now);
+        o.frequency.linearRampToValueAtTime(960, now + 0.35);
+        o.frequency.linearRampToValueAtTime(700, now + 0.7);
+
+        g.gain.setValueAtTime(0.15, now); // Increased volume gain
+        g.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+
+        o.connect(g); g.connect(AC.destination);
+        o.start(now); o.stop(now + 0.7);
+    } catch (e) { }
+}
+setInterval(() => { if (driving && state === "play") playSiren() }, 750);
+
 /* ---------- helpers ---------- */
 function announce(t) { $("live").textContent = ""; setTimeout(() => $("live").textContent = t, 20) }
 function toast(t) { const e = $("toast"); e.textContent = t; announce(t); e.style.opacity = 1; clearTimeout(e._t); e._t = setTimeout(() => e.style.opacity = 0, 3200) }
